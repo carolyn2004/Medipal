@@ -10,7 +10,7 @@ MakeCode: Handles wireless communication between Micro:bits.
 Python Script (received_string.py): Processes data from Micro:bits, checks data integrity, and updates webpages or ThingSpeak.
 
 ## 🌐 3. Networking:
-AWS Server: Hosts HTML resources (index, how-it-works, FAQ pages) accessible via public IP.
+AWS Server: Hosts HTML resources (images for index, how-it-works, FAQ pages) accessible via public IP.
 Local Server: Hosts a real-time data page accessible through a private IP within the local network.
 
 ## 🔗 4. Communication Protocols:
