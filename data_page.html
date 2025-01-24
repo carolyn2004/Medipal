@@ -1,0 +1,250 @@
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBMgxBhVu9VnxW5TcK1YGsOCWfAPZX80QI",
+        authDomain: "medicine-reminder-cadbf.firebaseapp.com",
+        projectId: "medicine-reminder-cadbf",
+        storageBucket: "medicine-reminder-cadbf.firebasestorage.app",
+        messagingSenderId: "909833948800",
+        appId: "1:909833948800:web:25c5d13294ab269abd2065",
+        measurementId: "G-KP9HX54F3D"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore();
+
+    // Function to prompt login if user is not authenticated
+    async function checkAuthentication() {
+        // Hide protected content initially
+        document.getElementById("protectedContent").style.display = "none";
+
+        // If already authenticated, skip login prompt and show protected content
+        if (localStorage.getItem("isAuthenticated") === "true") {
+            document.getElementById("protectedContent").style.display = "block";
+            console.log("User is already authenticated.");
+            return;
+        }
+
+        // Display the modal for username and password input
+        const loginModal = document.createElement('div');
+        loginModal.id = 'loginModal';
+        loginModal.innerHTML = `
+            <div id="loginModalContent">
+                <h2>Please log in</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <button id="loginButton">Login</button>
+                <button id="cancelButton">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(loginModal);
+
+        // Style the modal
+        document.getElementById('loginModal').style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; 
+            justify-content: center; align-items: center; z-index: 1000;
+        `;
+        document.getElementById('loginModalContent').style.cssText = `
+            background: white; padding: 20px; border-radius: 8px; text-align: center;
+        `;
+
+        // Handle login button click
+        document.getElementById('loginButton').onclick = async () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                alert("Username and password are required.");
+                return;
+            }
+
+            try {
+                // Query Firestore for the document with the matching username
+                const querySnapshot = await getDocs(collection(db, "login"));
+                let userDoc = null;
+                querySnapshot.forEach(doc => {
+                    if (doc.data().username === username) {
+                        userDoc = doc;
+                    }
+                });
+
+                if (userDoc) {
+                    const userData = userDoc.data();
+                    const storedPassword = userData.password;
+
+                    // Compare entered password with stored password
+                    if (password === storedPassword) {
+                        localStorage.setItem("isAuthenticated", "true");
+                        alert("Login successful!");
+                        document.getElementById("protectedContent").style.display = "block"; // Show protected content
+                        document.body.removeChild(loginModal); // Close the modal
+                    } else {
+                        alert("Incorrect password.");
+                    }
+                } else {
+                    alert("User not found.");
+                }
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        };
+
+        // Handle cancel button click
+        document.getElementById('cancelButton').onclick = () => {
+            alert("Login canceled.");
+            document.body.removeChild(loginModal); // Close the modal
+        };
+    }
+
+    // Run check on page load
+    checkAuthentication();
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medipal - Radio Data</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap">
+    <style>
+        html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+        
+        /* Navigation Bar */
+        nav {
+            background-color: #E6D6CC;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+
+        nav img {
+            width: 50px;
+            height: auto;
+        }
+
+        .nav-links {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-weight: 700;
+            font-family: 'Merriweather', sans-serif;
+        }
+
+        .nav-links a:hover {
+            color: #4A90E2;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4A90E2;
+            color: white;
+        }
+
+        /* Alternate row coloring */
+        tr:nth-child(even) {
+            background-color: rgb(202, 102, 118);
+            color: white;
+        }
+
+        /* Page Header */
+        h1 {
+            font-family: 'Merriweather', sans-serif;
+            color: #4A90E2;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Centered Content */
+        .content {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Hide protected content by default */
+        #protectedContent {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#"><img src="logo.png" alt="Medipal Logo"></a>
+        <div class="nav-links">
+            <a href="http://34.229.251.82/index.html">Home</a>
+            <a href="http://34.229.251.82/data_page.html">Data Page</a>
+            <a href="http://34.229.251.82/how-it-works.html">How it works</a>
+            <a href="http://34.229.251.82/faq.html">Frequently Asked Question</a>
+        </div>
+    </nav>
+
+    <!-- Protected Content Area -->
+    <div id="protectedContent" class="content">
+        <div style="text-align: center;">
+            <iframe width="450" height="260" style="border: 1px solid #cccccc; margin: 20px;" 
+                    src="https://thingspeak.com/channels/2723744/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+        
+            <iframe width="450" height="260" style="border: 1px solid #cccccc; margin: 20px;" 
+                    src="https://thingspeak.com/channels/2723945/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+        </div>
+        
+        
+        <h1>Radio Data</h1>
+
+        <!-- Data Table -->
+        <table>
+            <tr>
+                <th>Number of Pills</th>
+                <th>Date Timestamp</th>
+            </tr>
+            <!-- Sample data for demonstration; replace or append dynamically -->
+            <tr><td>2</td><td>Fri Nov 1 19:37:48 2024</td></tr>
+            <tr><td>2</td><td>Fri Nov 1 19:38:29 2024</td></tr>
+            <tr><td>2</td><td>Fri Nov 1 19:41:50 2024</td></tr>
+            <tr><td>2</td><td>Fri Nov 1 19:42:29 2024</td></tr>
+            <tr><td>2</td><td>Fri Nov 1 19:43:07 2024</td></tr>
+            <!-- Additional rows can be dynamically appended here -->
+  
+    </div>
+</body>
+</html>
+<tr><td>14</td><td>Fri Nov  8 11:46:05 2024</td></tr>
+<tr><td>14</td><td>Fri Nov  8 11:46:12 2024</td></tr>
+<tr><td>14</td><td>Fri Nov  8 11:46:20 2024</td></tr>
+<tr><td>14</td><td>Fri Nov  8 11:46:28 2024</td></tr>
+<tr><td>14</td><td>Fri Nov  8 11:47:12 2024</td></tr>
+<tr><td>12</td><td>Fri Nov  8 11:47:33 2024</td></tr>
+<tr><td>10</td><td>Fri Nov  8 14:20:00 2024</td></tr>
+<tr><td>8</td><td>Fri Nov  8 14:20:36 2024</td></tr>

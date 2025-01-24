@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medipal - FAQ</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Merriweather', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Background color */
+            color: #333;
+            line-height: 1.6;
+        }
+
+/* Navigation Bar */
+        nav {
+            background-color: #E6D6CC;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav img {
+            width: 50px;
+            height: auto;
+        }
+
+        .nav-links {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-weight: 700;
+            font-family: 'Merriweather', sans-serif;
+        }
+
+        .nav-links a:hover {
+            color: #4A90E2;
+        }
+
+        /* Banner Section */
+        .banner {
+            width: 100%; /* Full width */
+            height: 543px; /* Set to a specific height for design */
+            overflow: hidden; /* Hide overflow */
+        }
+
+        .banner img {
+            width: 100%; /* Full width of the container */
+            height: auto; /* Maintain aspect ratio */
+            object-fit: cover; /* Cover the area without distortion */
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #29353C; /* Header text color */
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .instruction {
+            text-align: center;
+            margin-bottom: 20px; /* Space below the instruction */
+            font-size: 16px;
+            color: #666; /* Instruction text color */
+        }
+
+        .faq-item {
+            background-color: #fff; /* Background for FAQ items */
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+            cursor: pointer; /* Indicate that it's clickable */
+            position: relative; /* Position for the plus sign */
+        }
+
+        .faq-item h3 {
+            margin: 0;
+            font-weight: 700;
+            color: #6F90AF; /* Color for FAQ questions */
+        }
+
+        .faq-answer {
+            display: none; /* Initially hide the answers */
+            margin-top: 10px;
+            background-color: #EDE7F6; /* Different background color for expanded part */
+            padding: 10px; /* Padding for the answer */
+            border-radius: 5px; /* Rounded corners for the answer */
+        }
+
+        .plus-sign {
+            position: absolute;
+            right: 10px; /* Positioning the plus sign to the right */
+            top: 15px;
+            font-size: 20px;
+            color: #6F90AF; /* Color for the plus sign */
+        }
+
+        /* Button styles */
+        .btn {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #357ABD;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #D2C2B1; /* Footer color */
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+    </style>
+    <script>
+        // Function to toggle the visibility of FAQ answers
+        function toggleAnswer(event) {
+            const answer = event.currentTarget.querySelector('.faq-answer');
+            const plusSign = event.currentTarget.querySelector('.plus-sign');
+
+            // Toggle display of answer
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                plusSign.textContent = '+'; // Change to plus sign
+                event.currentTarget.setAttribute('aria-expanded', 'false'); // Update aria attribute
+            } else {
+                answer.style.display = 'block';
+                plusSign.textContent = '-'; // Change to minus sign
+                event.currentTarget.setAttribute('aria-expanded', 'true'); // Update aria attribute
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#"><img src="logo.png" alt="Medipal Logo"></a>
+        <div class="nav-links">
+            <a href="http://34.229.251.82/index.html">Home</a>
+            <a href="http://10.124.135.57:80/data_page.html">Data Page</a>
+            <a href="http://34.229.251.82/how-it-works.html">How it works</a>
+            <a href="http://34.229.251.82/faq.html">Frequently Asked Question</a>
+        </div>
+    </nav>
+
+    <!-- Banner Section -->
+    <section>
+        <div class="banner">
+            <img src="banner2.png" alt="Medipal Banner"> <!-- Ensure correct image path -->
+        </div>
+    </section>
+
+    <div class="container">
+        <p style="margin-top: -100px;" class="instruction">Click on the + sign to expand each question.</p> <!-- Instruction added -->
+
+        <div class="faq-item" onclick="toggleAnswer(event)" aria-expanded="false">
+            <h3>Question 1: What is Medipal?</h3>
+            <span class="plus-sign">+</span> <!-- Plus sign added on the right -->
+            <p class="faq-answer">Medipal is a medicine alarm clock designed for the elderly to ensure they take their medication. It sounds an alarm at set times, which only stops when the user opens the box and takes their medicine. </p>
+        </div>
+        
+        <div class="faq-item" onclick="toggleAnswer(event)" aria-expanded="false">
+            <h3>Question 2: What are the benefits of Medipal?</h3>
+            <span class="plus-sign">+</span> <!-- Plus sign added on the right -->
+            <p class="faq-answer">Medipal is an easy and useful device because it helps prevent missed doses and improves medication adherence. The elderly can easily determine the correct number of medication pills to take by viewing the information displayed on the LED screen of the Micro:bit. Additionally, they can locate misplaced medicine by following the sound levels emitted by the device. This combination of visual and auditory cues helps ensure they take the right dosage and find their medication with ease. </p>
+        </div>
+        
+        <div class="faq-item" onclick="toggleAnswer(event)" aria-expanded="false">
+            <h3>Question 3: Can I customize the alarm times and sounds on the Medipal?</h3>
+            <span class="plus-sign">+</span> <!-- Plus sign added on the right -->
+            <p class="faq-answer">Yes, Medipal allows you to customize alarm times to fit your medication schedule. You can also choose from different sounds for the alarm, making it more personal and easier for you to respond to the reminder.</p>
+        </div>
+
+        <!-- Add more FAQ items as needed -->
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Medipal. All rights reserved.</p>
+        <p>Contact us at <a href="mailto:team2support@medipal.com" style="color: #333; text-decoration: none;">team2support@medipal.com</a></p>
+    </footer>
+
+</body>
+</html>

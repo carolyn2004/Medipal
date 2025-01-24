@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medipal</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+       * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Merriweather', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+       
+
+        /* Progress Bar */
+        #progress-bar-container {
+            width: 60%;
+            background-color: #dfe6f2;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #progress-bar {
+            width: 0;
+            height: 15px;
+            background-color: #6F90AF; /* Updated progress bar color */
+            border-radius: 30px;
+            transition: width 2s ease;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #E6D6CC;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav img {
+            width: 50px;
+            height: auto;
+        }
+
+        .nav-links {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-weight: 700;
+            font-family: 'Merriweather', sans-serif;
+        }
+
+        .nav-links a:hover {
+            color: #4A90E2;
+        }
+
+
+        .faq-link {
+            margin-left: auto; /* Space between logo and FAQ link */
+            text-decoration: none;
+            color: black; /* Default color */
+            font-family: 'Merriweather', sans-serif;
+            font-weight: 700;
+        }
+
+        .faq-link:hover {
+            color: #4A90E2; /* Color on hover */
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #29353C; /* Header text color */
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        /* Slideshow */
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto; /* Center slideshow */
+            overflow: hidden; /* Hide overflow */
+            display: flex;
+            justify-content: center; /* Center the slideshow */
+            align-items: center; /* Center the images vertically */
+        }
+
+        .slideshow-image {
+            display: none; /* Hide images by default */
+            width: 80%; /* Decreased width */
+            height: 600px; /* Increased height */
+            object-fit: cover; /* Maintain aspect ratio while covering the area */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin: 0; /* Remove margin to eliminate space */
+        }
+
+        .active {
+            display: block; /* Show the active image */
+        }
+
+        /* Navigation Arrows */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: 40px; /* Changed to rectangular */
+            height: 40px; /* Added height */
+            padding: 0;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 5px; /* Changed to rounded corners */
+            transform: translateY(-50%);
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .prev {
+            left: 10px; /* Positioned to the left */
+        }
+
+        .next {
+            right: 10px; /* Positioned to the right */
+        }
+
+        /* Flip card style */
+        .flip-card {
+            width: 300px;
+            height: 350px;
+            perspective: 1000px;
+            transition: transform 0.3s;
+        }
+
+        .flip-card-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            transform: rotateY(0deg);
+            box-sizing: border-box;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background: white;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            flex-direction: column;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .flip-card-front {
+            background-color: #6F90AF; /* Updated front card color */
+            color: white;
+        }
+
+        .flip-card-back {
+            background-color: white;
+            color: #333;
+            transform: rotateY(180deg);
+        }
+
+        .flip-card h3 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        /* Position images */
+        .card-icon {
+            position: absolute;
+            top: 10px; /* Adjust this value to position the image */
+            left: 10px; /* Adjust this value to position the image */
+            width: 30px; /* Adjust the size of the icons */
+            height: 30px; /* Adjust the size of the icons */
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        .timeline-item {
+            text-align: center;
+            padding: 10px;
+            flex: 1;
+        }
+
+        .timeline-item h3 {
+            background-color: transparent;
+            color: #29353C; /* Updated timeline item header color */
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .timeline-item p {
+            background-color: #6F90AF; /* Timeline item text color */
+            color: white;
+            border-radius: 20px;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .connector {
+            height: 2px;
+            background-color: #6F90AF; /* Connector color */
+            flex-grow: 1;
+        }
+
+        /* Video Section */
+        .video-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .video-section iframe {
+            width: 80%;
+            height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button styles */
+        .btn {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #357ABD;
+        }
+
+        /* Media Query for Responsive Design */
+        @media (max-width: 600px) {
+            .flip-card {
+                width: 90%;
+                height: 300px;
+            }
+        }
+        .video-container {
+        width: 150px; /* Width of the container */
+        height: 160px; /* Height of the container */
+        overflow: hidden; /* Crop overflow */
+        position: relative; /* Position context */
+    }
+
+    .video-container video {
+        position: absolute; /* Absolute positioning */
+        top: 50%; /* Center vertically */
+        left: 50%; /* Center horizontally */
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        transform: translate(-50%, -50%); /* Center the video */
+        object-fit: cover; /* Ensure it covers the container */
+        margin: 0; /* Remove any default margins */
+        padding: 0; /* Remove any default padding */
+    }
+     /* Footer styles */
+     footer {
+            background-color: #D2C2B1; /* Footer color */
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+
+  
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#"><img src="logo.png" alt="Medipal Logo"></a>
+        <div class="nav-links">
+            <a href="http://34.229.251.82/index.html">Home</a>
+            <a href="http://10.124.135.57:80/data_page.html">Data Page</a>
+            <a href="http://34.229.251.82/how-it-works.html">How it works</a>
+            <a href="http://34.229.251.82/faq.html">Frequently Asked Question</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Images of our product</h2>
+
+        <!-- Image Slideshow -->
+        <div class="slideshow-container">
+            <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+            <img src="image1.jpg" class="slideshow-image active" alt="Image 1"> <!-- Add your image URLs here -->
+            <img src="image2.jpg" class="slideshow-image" alt="Image 2"> <!-- Add your image URLs here -->
+            <img src="image3.jpg" class="slideshow-image" alt="Image 3"> <!-- Add your image URLs here -->
+            <button class="next" onclick="changeSlide(1)">&#10095;</button>
+        </div>
+
+        <h2>How It Works: Flip the Cards</h2>
+        <div class="card-container">
+            <!-- Card 1: Sound Reminder -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="sound.png" alt="Sound Icon" class="card-icon">
+                        <h3>Feature 1</h3>
+                        <p>Microbit emits a sound to remind the elderly to take medicine. Sound stops when the lid is opened.</p>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Data Collection</h3>
+                        <p><strong>Accelerometer:</strong> Detects lid opening, stopping the alarm sound.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: LED Display -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="light-bulb.png" alt="Lightbulb Icon" class="card-icon">
+                        <h3>Feature 2</h3>
+                        <p>Microbit displays an LED showing the number of pills to take, reducing confusion.</p>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Data Collection</h3>
+                        <p><strong>Touch Sensor:</strong> Displays LED showing the number of pills or sachets to take when pressed.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Sound Locator -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="placeholder.png" alt="Placeholder Icon" class="card-icon">
+                        <h3>Feature 3</h3>
+                        <p>A second Microbit emits a sound that gets louder as it gets closer to the medicine, helping to locate it.</p>
+                    </div>
+                    <div class="flip-card-back">
+                        <h3>Data Collection</h3>
+                        <p><strong>Radio Signal Sensor:</strong> Detects proximity between the second Microbit and the medicine box.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Embedded Video Section -->
+        <div class="video-section">
+            <h2>Watch How It Works</h2>
+            <video width="800" height="450" controls poster="black.jpg"> <!-- Added controls -->
+                <source src="group2_mission1_video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div> 
+    </div>
+
+    <script>z
+        // Loading functionality
+        // JavaScript to handle the loading screen and progress bar
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Simulate loading
+        var progressBar = document.getElementById('progress-bar');
+        var width = 0;
+
+        // Function to update the progress bar
+        var loadingInterval = setInterval(function() {
+            if (width >= 100) {
+                clearInterval(loadingInterval);
+                // Hide the loading screen and show the content
+                document.getElementById('loading').style.display = 'none';
+            } else {
+                width+=80;
+                progressBar.style.width = width + '%'; // Update the progress bar width
+            }
+        },1000); // Adjust the speed of loading by changing the interval time
+    });
+
+        // Image Slideshow functionality
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slideshow-image');
+
+        function showSlides() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === slideIndex) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function changeSlide(n) {
+            slideIndex = (slideIndex + n + slides.length) % slides.length;
+            showSlides();
+        }
+
+        showSlides(); // Show the first slide initially
+        setInterval(() => changeSlide(1), 3000); // Change image every 3 seconds
+    </script>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Medipal. All rights reserved.</p>
+        <p>Contact us at <a href="g11team2support@medipal.com" style="color: #333; text-decoration: none;">g11team2support@medipal.com</a></p>
+    </footer>
+</body>
+</html>
