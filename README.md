@@ -1,5 +1,4 @@
 # 💊 Medipal
-Disclaimer: The code organisation might be a little messy for this repository :P Sorry about that.
 
 ## 📟 1. Sensors and Hardware Integration:
 Micro:bits (4 units): Utilized for collecting and transmitting data wirelessly via sensors (temperature, accelerometer, radio, touch).
